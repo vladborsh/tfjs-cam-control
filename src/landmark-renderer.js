@@ -1,4 +1,5 @@
-const KEY_POINT_RADIUS = 3
+const KEY_POINT_RADIUS = 5;
+const KEY_POINT_COLOR = 'white';
 
 export class LandmarkRenderer {
   constructor(videoId, canvasId, detectionRunner) {
@@ -10,32 +11,34 @@ export class LandmarkRenderer {
 
   init() {
     const render = (estimation) => {
+      this.context.clearRect(0, 0, this.video.width, this.video.height);
+
       if (estimation && estimation.handInViewConfidence > 0.9) {
-        this.context.clearRect(0, 0, this.video.width, this.video.height);
-        this.context.strokeStyle = 'red';
-        this.context.fillStyle = 'red';
+        console.log(estimation)
+        this.context.strokeStyle = KEY_POINT_COLOR;
+        this.context.fillStyle = KEY_POINT_COLOR;
 
         this.renderKeyPoints(estimation.landmarks);
-        this.renderFingers(estimation.annotations);
+        this.renderFingers(estimation.annotations, estimation.landmarks[0]);
       }
     }
 
     this.detectionRunner.addListener(render);
   }
 
-  renderKeyPoints(points) {
-    for (let i = 0; i < points.length; i++) {
-      const y = points[i][0];
-      const x = points[i][1];
+  renderKeyPoints(landmarks) {
+    for (let i = 0; i < landmarks.length; i++) {
+      const x = landmarks[i][0];
+      const y = landmarks[i][1];
       this.context.beginPath();
       this.context.arc(x, y, KEY_POINT_RADIUS, 0, 2 * Math.PI);
       this.context.fill();
     }
   }
 
-  renderFingers(annotations) {
+  renderFingers(annotations, palmBase) {
     for (const finger in annotations) {
-      const points = annotations[finger];
+      const points = [ palmBase, ...annotations[finger]];
       this.context.beginPath()
       this.context.moveTo(points[0][0], points[0][1]);
       for (let i = 1; i < points.length; i++) {

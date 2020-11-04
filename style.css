@@ -1,12 +1,15 @@
-video {
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-}
-
 .camera-box {
   position: relative;
 }
 
-#video, #canvas {
+#video {
   position: absolute;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+#canvas {
+  position: absolute;
+  transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
 }
