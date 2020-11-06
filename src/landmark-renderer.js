@@ -10,11 +10,11 @@ export class LandmarkRenderer {
   }
 
   init() {
+    console.log('LandmarkRenderer init...');
     const render = (estimation) => {
       this.context.clearRect(0, 0, this.video.width, this.video.height);
 
-      if (estimation && estimation.handInViewConfidence > 0.9) {
-        console.log(estimation)
+      if (estimation && estimation.handInViewConfidence > 0.7) {
         this.context.strokeStyle = KEY_POINT_COLOR;
         this.context.fillStyle = KEY_POINT_COLOR;
 

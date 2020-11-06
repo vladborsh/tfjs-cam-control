@@ -13,3 +13,7 @@
   transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
 }
+
+#track-hand-slide {
+  margin-left: 800px;
+}
