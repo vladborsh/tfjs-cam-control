@@ -10,6 +10,7 @@ export class HandEstimator {
   async load() {
     return handpose.load()
       .then(model => {
+        console.log('Model loaded...')
         this.model = model;
         return model;
       });
