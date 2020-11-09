@@ -17,3 +17,8 @@
 #train-controller {
   margin-left: 700px;
 }
+
+.button {
+  display: block;
+  margin: 10px;
+}

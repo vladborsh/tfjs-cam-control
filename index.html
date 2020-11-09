@@ -12,9 +12,19 @@
     </div>
 
     <div id="train-controller">
-      <button type="button" id="track-hand-slide" class="buttons">Track hand slide</button>
-      <button type="button" id="save-data-set" class="buttons">Save</button>
-      <div id="number-of-collected"></div>
+      <button type="button" id="track-hand-slide" class="button">Track hand slide</button>
+      <button type="button" id="track-idle" class="button">Track idle</button>
+      <button type="button" id="load-data-set" class="button">Load</button>
+      <input type="file" id="data-set-input">File data set</button>
+      <button type="button" id="save-data-set" class="button">Save</button>
+      <div class="container">
+        Idle:
+        <div id="number-of-collected-idle"></div>
+      </div>
+      <div class="container">
+        Hand slide:
+        <div id="number-of-collected-hand-slide"></div>
+      </div>
     </div>
   </body>
   <link rel="stylesheet" href="style.css">

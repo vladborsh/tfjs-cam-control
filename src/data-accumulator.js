@@ -24,7 +24,7 @@ export class DataAccumulator {
     document.body.removeChild(element);
   }
 
-  importJson(fileInputId) {
+  importJson(fileInputId, onLoad) {
     const files = document.getElementById(fileInputId).files;
 
     if (files.length <= 0) {
@@ -34,7 +34,10 @@ export class DataAccumulator {
     const fr = new FileReader();
 
     fr.onload = (e) => {
-      this.datasetMap = JSON.parse(e.target.result);
+      this.datasetMap = { ...JSON.parse(e.target.result) }
+      if (onLoad) {
+        onLoad(this.datasetMap);
+      }
     }
 
     fr.readAsText(files.item(0));
