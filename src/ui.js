@@ -30,8 +30,8 @@ export class UI {
 
     button.addEventListener('click', () => {
       this.dataAccumulationController.accumulate('handSlide', () => {
-        if (this.collected.idle.container) {
-          this.collected.idle.container.innerText = ++this.collected.idle.value;
+        if (this.collected.handSlide.container) {
+          this.collected.handSlide.container.innerText = ++this.collected.handSlide.value;
         }
       });
     })
@@ -43,9 +43,9 @@ export class UI {
     if (!button) return;
 
     button.addEventListener('click', () => {
-      this.dataAccumulationController.accumulate('handSlide', () => {
-        if (this.collected.handSlide.container) {
-          this.collected.handSlide.container.innerText = ++this.collected.handSlide.value;
+      this.dataAccumulationController.accumulate('idle', () => {
+        if (this.collected.idle.container) {
+          this.collected.idle.container.innerText = ++this.collected.idle.value;
         }
       });
     })
@@ -67,7 +67,12 @@ export class UI {
     if (!button) return;
 
     button.addEventListener('click', () => {
-      this.dataAccumulator.importJson('data-set-input', (data) => console.log(data));
+      this.dataAccumulator.importJson('data-set-input', (data) => {
+        this.collected.handSlide.value = data.handSlide.length;
+        this.collected.idle.value = data.idle.length;
+        this.collected.handSlide.container.innerText = data.handSlide.length;
+        this.collected.idle.container.innerText = data.idle.length;
+      });
     })
   }
 }
