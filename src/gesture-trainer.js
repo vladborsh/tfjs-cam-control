@@ -5,13 +5,13 @@ export class GestureTrainer {
     inputs,
     outputs,
     trainingSize,
-    batchSize,
+    windowSize,
     epochs,
     learningRate,
     layersNumber,
     onEpochEnd
   ) {
-    const inputLayerShape = batchSize;
+    const inputLayerShape = windowSize;
     const inputLayerNeurons = 100;
     const rnnInputShape  = [10, inputLayerNeurons / 10];
     const rnnOutputNeurons = 20;
@@ -38,7 +38,7 @@ export class GestureTrainer {
     const history = await model.fit(
       dataSeries,
       labelSeries,
-      { batchSize, epochs, callbacks: {
+      { batchSize: windowSize, epochs, callbacks: {
         onEpochEnd: async (epoch, log) => onEpochEnd(epoch, log),
       }
     });
