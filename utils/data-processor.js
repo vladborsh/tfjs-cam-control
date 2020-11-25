@@ -11,7 +11,6 @@ const data = JSON.parse(fileContent);
 const gestures = Object.keys(data);
 const getLabel = (keyIndex) => Array.from({length: gestures.length}, (_, i) => i === keyIndex ? 1 : 0);
 
-
 const processedSeries = gestures
   .map((key, keyIndex) => data[key]
     .map(coordinatesSeries => [

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Header</title>
+  </head>
+  <body>
+    <div class="camera-box">
+      <video autoplay width=224 height=224 id="video"></video>
+
+      <button id="capture-1">Capture 1</button>
+      <button id="capture-2">Capture 2</button>
+      <button id="train">Train</button>
+      <button id="predict">Predict</button>
+    </div>
+  </body>
+  <script src="../../dist/demo1.bundle.js"></script>
+  <style>
+    video {
+      height: 160px;
+      transform: scaleX(-1);
+    }
+  </style>
+</html>
