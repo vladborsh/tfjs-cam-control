@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const tf = require('@tensorflow/tfjs');
-const { input } = require('@tensorflow/tfjs');
-
+require('@tensorflow/tfjs-node');
 
 const argsList = process.argv.slice(2);
 const relativePath = path.join(__dirname, '..', argsList[0]);
@@ -26,18 +25,10 @@ const processedSeries = gestures
   )
   .reduce((acc, curr) => [...acc, ...curr], [])
 
-console.log(processedSeries[0]);
-
 const inputs = processedSeries.map(data => data[1])
 const outputs = processedSeries.map(data => data[0])
 const numOfClasses = outputs[0].length;
-
-console.log(inputs[0].length);
-console.log(inputs[0][0].length);
-
 const inputShape = [inputs[0].length, inputs[0][0].length];
-
-console.log(inputShape)
 
 class GestureTrainer {
   async trainModel(
@@ -100,6 +91,14 @@ class GestureTrainer {
   }
 }
 
-const trainer = new GestureTrainer();
+async function trainAndExport() {
+  const trainer = new GestureTrainer();
+  const { model } = await trainer.trainModel(inputs, outputs, numOfClasses, inputShape, 20, 100, 100, 0.1, (epoch, log) => console.log(epoch, log));
+  // const modelJson = model.toJSON();
+  const relativeModelPath = path.join(__dirname, '..', 'trained-model.json');
+  // fs.writeFileSync(relativeModelPath, JSON.stringify(modelJson));
+  await model.save(`file://${relativeModelPath}`);
+  // await model.save(`file://./model-1a`);
+}
 
-const { model } = trainer.trainModel(inputs, outputs, numOfClasses, inputShape, 20, 100, 100, 0.1, (epoch, log) => console.log(epoch, log));
+trainAndExport();
