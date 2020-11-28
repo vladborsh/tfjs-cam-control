@@ -4,55 +4,45 @@ export class UIController {
     this.dataAccumulator = dataAccumulator;
     this.modelTrainer = modelTrainer;
     this.predictor = predictor;
-    this.collected = {
-      idle: {
-        container: document.getElementById('number-of-collected-idle'),
-        value: 0,
-      },
-      handSlide: {
-        container: document.getElementById('number-of-collected-hand-slide'),
-        value: 0,
-      }
-    }
+    this.collected = {};
+    this.trackerLabels = [
+      'idle',
+      'hand-left-slide',
+      'hand-right-slide',
+      'hand-top-slide',
+      'hand-bottom-slide',
+      'rotate-clockwise',
+      'rotate-counter-clockwise',
+    ];
   }
 
   init() {
-    console.log('LandmarkRenderer init...');
+    this.trackerLabels.forEach(label => {
+      this.collected = {
+        ...this.collected,
+        [label]: {
+          container: document.getElementById(`number-of-collected-${label}`),
+          value: 0,
+        }
+      }
 
-    this.initTrackingHandSlide();
-    this.initTrackingHandIdle();
+      const button = document.getElementById(`track-${label}`);
+
+      if (!button) return;
+
+      button.addEventListener('click', () => {
+        this.dataAccumulationController.accumulate([label], () => {
+          if (this.collected[label].container) {
+            this.collected[label].container.innerText = ++this.collected[label].value;
+          }
+        });
+      })
+    })
+
     this.initSaveTrainDataset();
     this.initLoadTrainDataset();
     this.initTrainModelHandler();
     this.initPredictHandler();
-  }
-
-  initTrackingHandSlide() {
-    const button = document.getElementById('track-hand-slide');
-
-    if (!button) return;
-
-    button.addEventListener('click', () => {
-      this.dataAccumulationController.accumulate('handSlide', () => {
-        if (this.collected.handSlide.container) {
-          this.collected.handSlide.container.innerText = ++this.collected.handSlide.value;
-        }
-      });
-    })
-  }
-
-  initTrackingHandIdle() {
-    const button = document.getElementById('track-idle');
-
-    if (!button) return;
-
-    button.addEventListener('click', () => {
-      this.dataAccumulationController.accumulate('idle', () => {
-        if (this.collected.idle.container) {
-          this.collected.idle.container.innerText = ++this.collected.idle.value;
-        }
-      });
-    })
   }
 
   initSaveTrainDataset() {
@@ -72,10 +62,11 @@ export class UIController {
 
     button.addEventListener('click', () => {
       this.dataAccumulator.importJson('data-set-input', (data) => {
-        this.collected.handSlide.value = data.handSlide.length;
-        this.collected.idle.value = data.idle.length;
-        this.collected.handSlide.container.innerText = data.handSlide.length;
-        this.collected.idle.container.innerText = data.idle.length;
+        const labels = Object.keys(data);
+        labels.forEach(label => {
+          this.collected[label].value = data[label].length;
+          this.collected[label].container.innerText = data[label].length;
+        });
       });
     })
   }

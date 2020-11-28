@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs';
 
 export class ModelTrainer {
   constructor() {
-    this.epochs = 100;
+    this.epochs = 200;
     this.learningRate = 0.01;
     this.rnnOutputNeurons = 20;
   }
@@ -61,6 +61,7 @@ export class ModelTrainer {
     const model = tf.sequential();
 
     model.add(tf.layers.lstm({units: rnnOutputNeurons, inputShape: inputLayerShape}));
+    model.add(tf.layers.dense({units: 100, kernelInitializer: 'varianceScaling', useBias: true, activation: 'relu'}));
     model.add(tf.layers.dense({units: numOfClasses, kernelInitializer: 'varianceScaling', useBias: false, activation: 'softmax'}));
 
     model.compile({
@@ -89,21 +90,9 @@ export class ModelTrainer {
   }
 
   prepareLabeledData(inputs, outputs, inputLayerShape) {
-    console.log([inputs.length, ...inputLayerShape])
-    console.log([outputs.length, outputs[0].length])
     const dataSeries = tf.tensor3d(inputs, [inputs.length, ...inputLayerShape]).div(640);
     const labelSeries = tf.tensor2d(outputs, [outputs.length, outputs[0].length]);
 
     return { dataSeries, labelSeries };
-  }
-
-  async predict(input) {
-    const result = model.predict(tf.tensor3d([input], [1, ...this.inputShape]).div(640));
-    const predictedClass = result.as1D().argMax();
-    const data = await predictedClass.data();
-
-    result.print();
-    result.as1D().print();
-    result.as1D().argMax().print();
   }
 }

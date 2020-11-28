@@ -30,32 +30,59 @@
       display: block;
       margin: 10px;
     }
+
+    .container {
+      border-top: 1px solid #555;
+      margin: 15px;
+    }
   </style>
   <body>
     <div class="camera-box">
       <video autoplay width="640" height="480" id="video"></video>
       <canvas width="640" height="480" id="canvas"></canvas>
     </div>
-
     <div id="train-controller">
-      <div class="trackers">
-        <button type="button" id="track-hand-slide" class="button">Track hand left slide</button>
-        <button type="button" id="track-idle" class="button">Track idle</button>
-      </div>
       <button type="button" id="load-data-set" class="button">Load</button>
       <input type="file" id="data-set-input">File data set</button>
       <button type="button" id="save-data-set" class="button">Save</button>
       <div class="container">
+        <button type="button" id="track-idle" class="button">Track idle</button>
         Idle:
         <div id="number-of-collected-idle"></div>
       </div>
       <div class="container">
-        Hand slide:
-        <div id="number-of-collected-hand-slide"></div>
+        <button type="button" id="track-hand-left-slide" class="button">Track hand left slide</button>
+        Hand left slide:
+        <div id="number-of-collected-hand-left-slide"></div>
+      </div>
+      <div class="container">
+        <button type="button" id="track-hand-right-slide" class="button">Track hand right slide</button>
+        Hand right slide:
+        <div id="number-of-collected-hand-right-slide"></div>
+      </div>
+      <div class="container">
+        <button type="button" id="track-hand-top-slide" class="button">Track hand top slide</button>
+        Hand top slide:
+        <div id="number-of-collected-hand-top-slide"></div>
+      </div>
+      <div class="container">
+        <button type="button" id="track-hand-bottom-slide" class="button">Track hand bottom slide</button>
+        Hand bottom slide:
+        <div id="number-of-collected-hand-bottom-slide"></div>
+      </div>
+      <div class="container">
+        <button type="button" id="track-rotate-clockwise" class="button">Track rotate clockwise</button>
+        Hand rotate-clockwise:
+        <div id="number-of-collected-rotate-clockwise"></div>
+      </div>
+      <div class="container">
+        <button type="button" id="track-rotate-counter-clockwise" class="button">Track rotate counter clockwise</button>
+        Hand rotate-clockwise:
+        <div id="number-of-collected-rotate-counter-clockwise"></div>
       </div>
       <button type="button" id="train-model" class="button">Train model</button>
       <button type="button" id="predict" class="button">Predict</button>
     </div>
   </body>
-  <script src="../dist/demo_2.bundle.js"></script>
+  <script src="../../dist/demo_2.bundle.js"></script>
 </html>
