@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #d6467d, #f8dfee);
+    }
+
+    .player {
+      position: relative;
+      width: 350px;
+      background: #f1f3f6;
+      box-shadow: 0 50px 80px #00000075;
+    }
+
+    .player .imgBox {
+      position: relative;
+      width: 100%;
+      height: 350px;
+    }
+
+    .player .imgBox img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .player audio {
+      width: 100%;
+      outline: none;
+    }
+
+    audio::-webkit-media-controls input[pseudo="-webkit-media-controls-timeline" i]::-webkit-slider-thumb {
+      opacity: 1 !important;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <div class="imgBox">
+      <img src="https://fsa.zobj.net/crop.php?r=37RC-ubMevrFGyD1W8KjSezvnIUFJiQwRwhDHw5uFfOfQpnroZhgYAo9PAP2ZZxs84lKPkYQVqpDYrmxWKzG8gZQgsLkAQOwdpWpxFxaeq6tsshZJRBPeieiMEHOqs7gDF0p8UN3RsfXWH6l" alt="">
+    </div>
+    <audio controls>
+      <source src="jakehill.mp3" type="audio/mp3">
+    </audio>
+  </div>
+</body>
+</html>
