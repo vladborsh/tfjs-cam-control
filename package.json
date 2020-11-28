@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "demo_2:start": "webpack --watch",
+    "demo:start": "webpack --watch",
     "utils:start": "webpack --config utils-webpack.config.js ",
-    "demo_1:start": "webpack --watch --config webpack_demo_1.config.js",
     "docker:build": "docker build -t cam-controller .",
     "docker:run": "docker run -d --env-file .env.docker -p 4001:4001/tcp cam-controller:latest"
   },

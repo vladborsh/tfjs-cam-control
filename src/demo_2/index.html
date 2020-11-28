@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Header</title>
   </head>
+  <style>
+    .camera-box {
+      position: relative;
+    }
+
+    #video {
+      position: absolute;
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+    }
+
+    #canvas {
+      position: absolute;
+      transform: scaleX(-1);
+      -webkit-transform: scaleX(-1);
+    }
+
+    #train-controller {
+      margin-left: 700px;
+    }
+
+    .button {
+      display: block;
+      margin: 10px;
+    }
+  </style>
   <body>
     <div class="camera-box">
       <video autoplay width="640" height="480" id="video"></video>
@@ -12,8 +38,10 @@
     </div>
 
     <div id="train-controller">
-      <button type="button" id="track-hand-slide" class="button">Track hand slide</button>
-      <button type="button" id="track-idle" class="button">Track idle</button>
+      <div class="trackers">
+        <button type="button" id="track-hand-slide" class="button">Track hand left slide</button>
+        <button type="button" id="track-idle" class="button">Track idle</button>
+      </div>
       <button type="button" id="load-data-set" class="button">Load</button>
       <input type="file" id="data-set-input">File data set</button>
       <button type="button" id="save-data-set" class="button">Save</button>
@@ -29,6 +57,5 @@
       <button type="button" id="predict" class="button">Predict</button>
     </div>
   </body>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../dist/bundle.js"></script>
+  <script src="../dist/demo_2.bundle.js"></script>
 </html>

@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry:{
+    demo_1: './src/demo_1/index.js',
+    demo_2: './src/demo_2/index.js',
+  },
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -13,7 +16,7 @@ module.exports = {
     ],
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [],
