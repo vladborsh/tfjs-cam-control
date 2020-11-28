@@ -1,7 +1,9 @@
-export class UI {
-  constructor(dataAccumulationController, dataAccumulator) {
+export class UIController {
+  constructor(dataAccumulationController, dataAccumulator, modelTrainer, predictor) {
     this.dataAccumulationController = dataAccumulationController;
     this.dataAccumulator = dataAccumulator;
+    this.modelTrainer = modelTrainer;
+    this.predictor = predictor;
     this.collected = {
       idle: {
         container: document.getElementById('number-of-collected-idle'),
@@ -20,7 +22,9 @@ export class UI {
     this.initTrackingHandSlide();
     this.initTrackingHandIdle();
     this.initSaveTrainDataset();
-    this.initLoadTrainDataset()
+    this.initLoadTrainDataset();
+    this.initTrainModelHandler();
+    this.initPredictHandler();
   }
 
   initTrackingHandSlide() {
@@ -73,6 +77,29 @@ export class UI {
         this.collected.handSlide.container.innerText = data.handSlide.length;
         this.collected.idle.container.innerText = data.idle.length;
       });
+    })
+  }
+
+  initTrainModelHandler() {
+    const button = document.getElementById('train-model');
+
+    if (!button) return;
+
+    button.addEventListener('click', () => {
+      this.modelTrainer.train(
+        this.dataAccumulator.datasetMap,
+        (epoch, log) => console.log(epoch, log)
+      );
+    })
+  }
+
+  initPredictHandler() {
+    const button = document.getElementById('predict');
+
+    if (!button) return;
+
+    button.addEventListener('click', () => {
+      this.predictor.initPrediction();
     })
   }
 }

@@ -98,19 +98,19 @@ class UIController {
   init() {
     document.getElementById('capture-1').addEventListener('click', () => {
       new Timer(
-        () => this.trainingSampleCapturer.addExample(1, this.webCam.capture()),
+        () => this.trainingSampleCapturer.addExample(0, this.webCam.capture()),
         () => console.log(this.trainingSampleCapturer.savedX, this.trainingSampleCapturer.savedY),
-        10,
-        300
+        50,
+        100
       );
     })
 
     document.getElementById('capture-2').addEventListener('click', () => {
       new Timer(
-        () => this.trainingSampleCapturer.addExample(2, this.webCam.capture()),
+        () => this.trainingSampleCapturer.addExample(1, this.webCam.capture()),
         () => console.log(this.trainingSampleCapturer.savedX, this.trainingSampleCapturer.savedY),
-        10,
-        300
+        50,
+        100
       );
     })
 
@@ -119,7 +119,7 @@ class UIController {
     });
 
     document.getElementById('predict').addEventListener('click', () => {
-      console.log(this.predictor.predict());
+      this.predictor.predict().then(console.log);
     });
   }
 }
@@ -144,7 +144,7 @@ class RealModelTrainer {
   constructor(modelLoader, trainingSampleCapturer) {
     this.modelLoader = modelLoader;
     this.trainingSampleCapturer = trainingSampleCapturer;
-    this.NUM_HIDDEN_NEURONS = 10;
+    this.NUM_HIDDEN_NEURONS = 30;
     this.NUM_CLASSES = 2;
     this.NUM_EPOCHS = 100;
     this.LEARNING_RATE = 0.1;
@@ -187,13 +187,20 @@ class Predictor {
   }
 
   predict() {
-    return tf.tidy(() => {
+    const prediction = tf.tidy(() => {
       const img = this.webCam.capture();
       const innerPrediction = this.modelLoader.truncatedModel.predict(img);
       const finalPrediction = this.realModelTrainer.model.predict(innerPrediction);
 
       return finalPrediction.as1D().argMax();
     })
+
+    return prediction.data()
+      .then(data => {
+        prediction.dispose();
+
+        return data[0];
+      })
   }
 }
 

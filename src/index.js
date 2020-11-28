@@ -3,7 +3,9 @@ import { DataAccumulator } from "./data-accumulator";
 import { DetectionRunner } from "./detection-runner";
 import { HandEstimator } from "./hand-estimator";
 import { LandmarkRenderer } from "./landmark-renderer";
-import { UI } from "./ui";
+import { ModelTrainer } from "./model-trainer";
+import { Predictor } from "./predictor";
+import { UIController } from "./ui-controller";
 import { WebCam } from "./web-cam";
 
 const webCam = new WebCam('video');
@@ -12,7 +14,9 @@ const detectionRunner = new DetectionRunner(handEstimator);
 const landmarkRenderer = new LandmarkRenderer('video', 'canvas', detectionRunner);
 const dataAccumulator = new DataAccumulator();
 const dataAccumulationController = new DataAccumulationController(dataAccumulator, detectionRunner);
-const ui = new UI(dataAccumulationController, dataAccumulator);
+const modelTrainer = new ModelTrainer();
+const predictor = new Predictor(detectionRunner, modelTrainer);
+const uiController = new UIController(dataAccumulationController, dataAccumulator, modelTrainer, predictor);
 
 webCam.init()
   .then(() => handEstimator.load())
@@ -20,5 +24,6 @@ webCam.init()
     detectionRunner.init()
     landmarkRenderer.init();
     dataAccumulationController.init();
-    ui.init();
+    predictor.initTracking();
+    uiController.init();
   });
