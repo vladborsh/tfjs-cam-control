@@ -1,10 +1,15 @@
 import * as tf from '@tensorflow/tfjs';
 
+function randomNumber(max = 1, min = 0) {
+  if (min >= max) { return max; }
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 class WebCam {
   constructor(videoId) {
     this.video = document.getElementById(videoId);
-    this.WIDTH = 224;
-    this.HEIGHT = 224;
+    this.width = 224;
+    this.height = 224;
   }
 
   init() {
@@ -12,8 +17,8 @@ class WebCam {
       navigator.getUserMedia(
         {
           video: {
-            height: this.HEIGHT,
-            width: this.WIDTH,
+            height: this.height,
+            width: this.width,
             facingMode: 'user',
           }
         },
@@ -34,7 +39,7 @@ class WebCam {
       const croppedImage = this.cropImage(tf.browser.fromPixels(this.video));
       const batchedImage = croppedImage.expandDims(0);
 
-      return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+      return batchedImage.toFloat().div(tf.scalar(127));
     });
   }
 
@@ -64,9 +69,9 @@ class ModelLoader {
 }
 
 class TrainingSampleCapturer {
-  constructor(modelLoader, numClasses) {
+  constructor(modelLoader) {
     this.modelLoader = modelLoader;
-    this.numClasses = numClasses;
+    this.numClasses = 3;
   }
 
   addExample(label, imgData) {
@@ -88,47 +93,141 @@ class TrainingSampleCapturer {
 }
 
 class UIController {
-  constructor(webCam, trainingSampleCapturer, realModelTrainer, predictor) {
+  constructor(webCam, trainingSampleCapturer, realModelTrainer, predictor, gameController) {
     this.webCam = webCam;
     this.trainingSampleCapturer = trainingSampleCapturer;
     this.realModelTrainer = realModelTrainer;
     this.predictor = predictor;
+    this.gameController = gameController;
+    this.dataSeriesLength = 100;
   }
 
   init() {
-    document.getElementById('capture-1').addEventListener('click', () => {
-      new Timer(
-        () => this.trainingSampleCapturer.addExample(0, this.webCam.capture()),
-        () => console.log(this.trainingSampleCapturer.savedX, this.trainingSampleCapturer.savedY),
-        50,
-        100
-      );
-    })
-
-    document.getElementById('capture-2').addEventListener('click', () => {
-      new Timer(
-        () => this.trainingSampleCapturer.addExample(1, this.webCam.capture()),
-        () => console.log(this.trainingSampleCapturer.savedX, this.trainingSampleCapturer.savedY),
-        50,
-        100
-      );
+    [
+      'capture-1',
+      'capture-2',
+      'capture-3',
+    ].forEach((label, index) => {
+      document.getElementById(label).addEventListener('click', () => {
+        new Timer(
+          () => this.trainingSampleCapturer.addExample(index, this.webCam.capture()),
+          () => console.log(this.trainingSampleCapturer.savedX, this.trainingSampleCapturer.savedY),
+          this.dataSeriesLength,
+          10
+        );
+      });
     })
 
     document.getElementById('train').addEventListener('click', () => {
-      this.realModelTrainer.train();
+      const onBatchEnd = (logs) => {
+        const lossValue = document.getElementById('loss-value');
+        lossValue.innerText = logs.loss;
+      }
+      this.realModelTrainer.init();
+      this.realModelTrainer.train(onBatchEnd);
     });
 
-    document.getElementById('predict').addEventListener('click', () => {
-      this.predictor.predict().then(console.log);
+    document.getElementById('to-play-stage').addEventListener('click', () => {
+      const trainStage = document.getElementById('train-stage');
+      const playStage = document.getElementById('play-stage');
+
+      trainStage.style.display = 'none';
+      playStage.style.display = 'flex';
+      this.gameController.init();
     });
   }
 }
 
+class GameController {
+  constructor(predictor) {
+    this.turnTime = 3;
+    this.timer = document.getElementById('timer');
+    this.predictor = predictor;
+    this.turnMap = [
+      'rock',
+      'scissors',
+      'paper',
+    ];
+    this.score = {
+      player: 0,
+      computer: 0,
+    }
+  }
+
+  init() {
+    const runTimer = () => {
+      new Timer(
+        (iteration) => {
+          this.timer.innerText = this.turnTime - iteration;
+        },
+        () => {
+          const computerTurn = this.turnMap[randomNumber(3, 0)];
+
+          this.predictor.predict()
+            .then(index => {
+              const playerTurn = this.turnMap[index];
+              const result = this.compare(computerTurn, playerTurn);
+
+              this.drawResults(result, computerTurn, playerTurn);
+              runTimer();
+            });
+        },
+        this.turnTime,
+      )
+    }
+    runTimer();
+  }
+
+  // 1 - computer win
+  // 0 - player win
+  compare(computerTurn, playerTurn) {
+    if (computerTurn === 'rock' && playerTurn === 'scissors'
+      || computerTurn === 'scissors' && playerTurn === 'paper'
+      || computerTurn === 'paper' && playerTurn === 'rock'
+    ) {
+      return 1;
+    }
+    if (playerTurn === 'rock' && computerTurn === 'scissors'
+      || playerTurn === 'scissors' && computerTurn === 'paper'
+      || playerTurn === 'paper' && computerTurn === 'rock'
+    ) {
+      return 0;
+    }
+  }
+
+  drawResults(result, computerTurn, playerTurn) {
+    if (result === 0) {
+      this.score.player++;
+    }
+    if (result === 1) {
+      this.score.computer++;
+    }
+
+    [
+      ...document.getElementById('human-turn').querySelectorAll('.turn-img'),
+      ...document.getElementById('computer-turn').querySelectorAll('.turn-img'),
+    ]
+    .forEach(img => img.display = 'none');
+
+    const playerTurnImg = document
+      .querySelector('#human-turn')
+      .querySelector(`#${playerTurn}`);
+
+    playerTurnImg.display = 'block';
+
+    const computerTurnImg = document
+      .querySelector('#computer-turn')
+      .querySelector(`#${computerTurn}`);
+
+    computerTurnImg.display = 'block';
+  }
+}
+
 class Timer {
-  constructor(onTick, onEnd, duration, tickTime = 1000) {
+  constructor(onTick, onEnd, duration = 1, tickTime = 1000) {
     let iteration = 0;
     const interval = setInterval(() => {
-      onTick();
+      onTick(iteration);
 
       if (iteration < duration) {
         iteration++;
@@ -144,10 +243,10 @@ class RealModelTrainer {
   constructor(modelLoader, trainingSampleCapturer) {
     this.modelLoader = modelLoader;
     this.trainingSampleCapturer = trainingSampleCapturer;
-    this.NUM_HIDDEN_NEURONS = 30;
-    this.NUM_CLASSES = 2;
-    this.NUM_EPOCHS = 100;
-    this.LEARNING_RATE = 0.1;
+    this.numHiddenLayers = 30;
+    this.numClasses = 3;
+    this.numEpochs = 500;
+    this.learningRate = 0.001;
   }
 
   init() {
@@ -155,14 +254,14 @@ class RealModelTrainer {
       layers: [
         // shape.slice(1) потому что первое значение в shape - null
         tf.layers.flatten({ inputShape: this.modelLoader.truncatedModel.outputs[0].shape.slice(1)}),
-        tf.layers.dense({ units: this.NUM_HIDDEN_NEURONS, activation: 'relu', useBias: true}),
-        tf.layers.dense({ units: this.NUM_CLASSES, useBias: false, activation: 'softmax'})
+        tf.layers.dense({ units: this.numHiddenLayers, kernelInitializer: 'varianceScaling', useBias: true, activation: 'relu'}),
+        tf.layers.dense({ units: this.numClasses, kernelInitializer: 'varianceScaling', useBias: false, activation: 'softmax'})
       ]
     });
-    this.model.compile({optimizer: tf.train.adam(this.LEARNING_RATE), loss: 'categoricalCrossentropy'});
+    this.model.compile({optimizer: tf.train.adam(this.learningRate), loss: 'categoricalCrossentropy'});
   }
 
-  train() {
+  train(onBatchEnd) {
     const batchSize = Math.floor(this.trainingSampleCapturer.savedX.shape[0]);
 
     return this.model.fit(
@@ -170,9 +269,9 @@ class RealModelTrainer {
       this.trainingSampleCapturer.savedY,
       {
         batchSize,
-        epochs: this.NUM_EPOCHS,
+        epochs: this.numEpochs,
         callbacks: {
-          onBatchEnd: async (batch, logs) => console.log(logs),
+          onBatchEnd: async (batch, logs) => onBatchEnd(logs),
         }
       },
     );
@@ -186,7 +285,7 @@ class Predictor {
     this.realModelTrainer = realModelTrainer;
   }
 
-  predict() {
+  async predict() {
     const prediction = tf.tidy(() => {
       const img = this.webCam.capture();
       const innerPrediction = this.modelLoader.truncatedModel.predict(img);
@@ -207,16 +306,16 @@ class Predictor {
 function main() {
   const webCam = new WebCam('video');
   const modelLoader = new ModelLoader();
-  const trainingSampleCapturer = new TrainingSampleCapturer(modelLoader, 2);
+  const trainingSampleCapturer = new TrainingSampleCapturer(modelLoader);
   const realModelTrainer = new RealModelTrainer(modelLoader, trainingSampleCapturer);
   const predictor = new Predictor(webCam, modelLoader, realModelTrainer);
-  const uiController = new UIController(webCam, trainingSampleCapturer, realModelTrainer, predictor);
+  const gameController = new GameController(predictor);
+  const uiController = new UIController(webCam, trainingSampleCapturer, realModelTrainer, predictor, gameController);
 
   webCam.init()
     .then(() => uiController.init());
 
-  modelLoader.init()
-    .then(() => realModelTrainer.init());
+  modelLoader.init();
 }
 
 main();

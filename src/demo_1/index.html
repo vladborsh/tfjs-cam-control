@@ -6,31 +6,155 @@
     <title>Header</title>
   </head>
   <body>
-    <div id="train-stage">
-      <video autoplay width=224 height=224 id="video"></video>
+    <div id="main">
+      <div class="video">
+        <video autoplay width=224 height=224 id="video"></video>
+      </div>
 
       <div id="train-stage">
-        <button id="capture-1">Capture 1</button>
-        <button id="capture-2">Capture 2</button>
-        <button id="capture-3">Capture 3</button>
-        <button id="train">Train</button>
-        <button id="to-play-tage">To play stage</button>
+        <div class="tracking-buttons">
+          <button type="button" id="capture-1">Rock</button>
+          <button type="button" id="capture-2">Scissors</button>
+          <button type="button" id="capture-3">Paper</button>
+          <button type="button" id="train">Train</button>
+          <button type="button" id="to-play-stage">To play stage</button>
+        </div>
+        <div class="loss">
+          loss:
+          <span id="loss-value"></span>
+        </div>
       </div>
       <div id="play-stage">
-        <div id="timer"></div>
-        <div id="human-turn"></div>
-        <div id="computer-turn"></div>
+        <div id="human-turn">
+          <div id="img-box">
+            <img class="turn-img" id="paper" src="../../assets/paper.png" alt="">
+            <img class="turn-img" id="rock" src="../../assets/rock.png" alt="">
+            <img class="turn-img" id="scissors" src="../../assets/scissors.png" alt="">
+          </div>
+          <div id="score">
+          </div>
+        </div>
+        <div id="timer">
+          <span id="timer-label">3</span>
+          <div class="loader"></div>
+        </div>
+        <div id="computer-turn">
+          <div id="img-box">
+            <img class="turn-img" id="paper" src="../../assets/paper.png" alt="">
+            <img class="turn-img" id="rock" src="../../assets/rock.png" alt="">
+            <img class="turn-img" id="scissors" src="../../assets/scissors.png" alt="">
+          </div>
+          <div id="score">
+          </div>
+        </div>
       </div>
-      <div>
+      <!-- <div>
         <button id="predict">Predict</button>
-      </div>
+      </div> -->
     </div>
   </body>
-  <script src="../../dist/demo_2.bundle.js"></script>
+  <script src="../../dist/demo_1.bundle.js"></script>
   <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #1e213f, #52aeca);
+    }
+
+    .video {
+      display: flex;
+      justify-content: center;
+      margin: 30px;
+    }
+
     video {
+      width: 160px;
       height: 160px;
       transform: scaleX(-1);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px #00000075;
+    }
+
+    .tracking-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .tracking-buttons button {
+      background: #34375a;
+      border: none;
+      color: azure;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px #00000075;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .loss {
+      margin-top: 20px;
+      color: azure;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #play-stage {
+      display: none;
+      /* display: flex; */
+      justify-content: center;
+    }
+
+    #human-turn, #computer-turn {
+      width: 138px;
+    }
+
+    #timer {
+      width: 138px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    #timer-label {
+      position: absolute;
+      margin: 0 auto;
+      margin-top: 55px;
+      color: #f3f3f3;
+      font-size: 1.6rem;
+      font-weight: 700;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .loader {
+      margin-top: 20px;
+      opacity: 0.2;
+      position: absolute;
+      border: 12px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 12px solid #34375a;
+      box-sizing: border-box;
+      width: 100px;
+      height: 100px;
+      animation: spin 2s linear infinite;
+    }
+
+    .turn-img {
+      width: 138px;
+      border-radius: 50%;
+      box-shadow: 0 10px 30px #00000075;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </html>
