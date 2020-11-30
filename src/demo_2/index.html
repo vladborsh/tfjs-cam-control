@@ -48,40 +48,45 @@
       <div class="container">
         <button type="button" id="track-idle" class="button">Track idle</button>
         Idle:
-        <div id="number-of-collected-idle"></div>
+        <span id="number-of-collected-idle"></span>
       </div>
       <div class="container">
         <button type="button" id="track-hand-left-slide" class="button">Track hand left slide</button>
         Hand left slide:
-        <div id="number-of-collected-hand-left-slide"></div>
+        <span id="number-of-collected-hand-left-slide"></span>
       </div>
       <div class="container">
         <button type="button" id="track-hand-right-slide" class="button">Track hand right slide</button>
         Hand right slide:
-        <div id="number-of-collected-hand-right-slide"></div>
+        <span id="number-of-collected-hand-right-slide"></span>
       </div>
       <div class="container">
         <button type="button" id="track-hand-top-slide" class="button">Track hand top slide</button>
         Hand top slide:
-        <div id="number-of-collected-hand-top-slide"></div>
+        <span id="number-of-collected-hand-top-slide"></span>
       </div>
       <div class="container">
         <button type="button" id="track-hand-bottom-slide" class="button">Track hand bottom slide</button>
         Hand bottom slide:
-        <div id="number-of-collected-hand-bottom-slide"></div>
+        <span id="number-of-collected-hand-bottom-slide"></span>
       </div>
       <div class="container">
         <button type="button" id="track-rotate-clockwise" class="button">Track rotate clockwise</button>
         Hand rotate-clockwise:
-        <div id="number-of-collected-rotate-clockwise"></div>
+        <span id="number-of-collected-rotate-clockwise"></span>
       </div>
       <div class="container">
         <button type="button" id="track-rotate-counter-clockwise" class="button">Track rotate counter clockwise</button>
         Hand rotate-clockwise:
-        <div id="number-of-collected-rotate-counter-clockwise"></div>
+        <span id="number-of-collected-rotate-counter-clockwise"></span>
       </div>
       <button type="button" id="train-model" class="button">Train model</button>
       <button type="button" id="predict" class="button">Predict</button>
+    </div>
+    <div class="player">
+      <audio id="audio" controls>
+        <source src="../../assets/jakehill.mp3" type="audio/mp3">
+      </audio>
     </div>
   </body>
   <script src="../../dist/demo_2.bundle.js"></script>

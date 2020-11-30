@@ -8,8 +8,9 @@ export class ModelTrainer {
   }
 
   async train(data, onEpochEnd) {
-    const { inputs, outputs, numOfClasses, inputShape } = this.processData(data);
+    const { inputs, outputs, numOfClasses, inputShape, gestures } = this.processData(data);
     this.inputShape = inputShape;
+    this.gestures = gestures;
 
     return this.trainModel(
       inputs,
@@ -45,7 +46,7 @@ export class ModelTrainer {
     const numOfClasses = outputs[0].length;
     const inputShape = [inputs[0].length, inputs[0][0].length];
 
-    return { inputs, outputs, numOfClasses, inputShape };
+    return { inputs, outputs, numOfClasses, inputShape, gestures };
   }
 
   async trainModel(

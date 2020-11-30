@@ -13,11 +13,15 @@
 
       <div id="train-stage">
         <div class="tracking-buttons">
-          <button type="button" id="capture-1">Rock</button>
-          <button type="button" id="capture-2">Scissors</button>
-          <button type="button" id="capture-3">Paper</button>
+          <button type="button" id="capture-rock">Rock</button>
+          <button type="button" id="capture-scissors">Scissors</button>
+          <button type="button" id="capture-paper">Paper</button>
           <button type="button" id="train">Train</button>
           <button type="button" id="to-play-stage">To play stage</button>
+        </div>
+        <div class="log">
+          log:
+          <span id="log-value"></span>
         </div>
         <div class="loss">
           loss:
@@ -31,7 +35,9 @@
             <img class="turn-img" id="rock" src="../../assets/rock.png" alt="">
             <img class="turn-img" id="scissors" src="../../assets/scissors.png" alt="">
           </div>
-          <div id="score">
+          <div class="score-box">
+            human score:
+            <span id="score"></span>
           </div>
         </div>
         <div id="timer">
@@ -44,7 +50,9 @@
             <img class="turn-img" id="rock" src="../../assets/rock.png" alt="">
             <img class="turn-img" id="scissors" src="../../assets/scissors.png" alt="">
           </div>
-          <div id="score">
+          <div class="score-box">
+            computer score:
+            <span id="score"></span>
           </div>
         </div>
       </div>
@@ -95,10 +103,18 @@
       cursor: pointer;
     }
 
-    .loss {
+    .log, .loss {
       margin-top: 20px;
       color: azure;
       font-family: 'Courier New', Courier, monospace;
+    }
+
+    .score-box {
+      margin-top: 20px;
+      color: azure;
+      font-size: 1.2rem;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
     }
 
     #play-stage {
@@ -109,6 +125,7 @@
 
     #human-turn, #computer-turn {
       width: 138px;
+      height: 138px;
     }
 
     #timer {

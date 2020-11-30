@@ -7,7 +7,7 @@ export class Predictor {
     this.detectionRunner = detectionRunner;
     this.modelTrainer = modelTrainer;
     this.latestData = [];
-    this.interval = 300;
+    this.interval = 500;
     this.lastTimestamp;
   }
 
@@ -34,7 +34,10 @@ export class Predictor {
     setInterval(() => {
       if (Date.now() - this.lastTimestamp <= this.interval) {
         this.predict(this.latestData)
-          .then(result => console.log(result));
+          .then(dataIndex => {
+            console.log(this.modelTrainer.gestures[dataIndex])
+            document.dispatchEvent(new CustomEvent(this.modelTrainer.gestures[dataIndex], {detail: {}}));
+          });
       }
     }, this.interval);
   }
