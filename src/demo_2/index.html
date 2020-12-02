@@ -5,8 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Header</title>
   </head>
+  <body>
+    <div class="main">
+      <div class="camera-box">
+        <video autoplay width="640" height="480" id="video"></video>
+        <canvas width="640" height="480" id="canvas"></canvas>
+      </div>
+      <div id="train-controller">
+        <div class="container">
+          <div class="container">
+            <button type="button" id="load-data-set" class="button">Load</button>
+          </div>
+          <div class="container">
+            <label class="file-upload">
+              <input type="file" id="data-set-input"></button>
+              Choose data set
+            </label>
+            <span id="file-name"></span>
+          </div>
+          <div class="container">
+            <button type="button" id="save-data-set" class="button">Save</button>
+          </div>
+        </div>
+        <div class="container">
+          <button type="button" id="track-idle" class="button">Track idle</button>
+          Idle:
+          <span class="collected" id="number-of-collected-idle"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-hand-left-slide" class="button">Track hand left slide</button>
+          Hand left slide:
+          <span class="collected" id="number-of-collected-hand-left-slide"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-hand-right-slide" class="button">Track hand right slide</button>
+          Hand right slide:
+          <span class="collected" id="number-of-collected-hand-right-slide"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-hand-top-slide" class="button">Track hand top slide</button>
+          Hand top slide:
+          <span class="collected" id="number-of-collected-hand-top-slide"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-hand-bottom-slide" class="button">Track hand bottom slide</button>
+          Hand bottom slide:
+          <span class="collected" id="number-of-collected-hand-bottom-slide"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-rotate-clockwise" class="button">Track rotate clockwise</button>
+          Hand rotate-clockwise:
+          <span class="collected" id="number-of-collected-rotate-clockwise"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="track-rotate-counter-clockwise" class="button">Track rotate counter clockwise</button>
+          Hand rotate-clockwise:
+          <span class="collected" id="number-of-collected-rotate-counter-clockwise"></span>
+        </div>
+        <div class="container">
+          <button type="button" id="train-model" class="button">Train model</button>
+          <button type="button" id="predict" class="button">Predict</button>
+        </div>
+        <div class="container">
+          <div class="loss">
+            loss:
+            <span id="loss-value"></span>
+          </div>
+        </div>
+      </div>
+      <div id="player">
+        <audio id="audio" controls>
+          <source src="../../assets/jakehill.mp3" type="audio/mp3">
+        </audio>
+      </div>
+    </div>
+  </body>
   <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #252423, #444443);
+    }
+
+    .main {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
     .camera-box {
+      width: 640px;
       position: relative;
     }
 
@@ -14,6 +104,8 @@
       position: absolute;
       -webkit-transform: scaleX(-1);
       transform: scaleX(-1);
+      border-radius: 4px;
+      box-shadow: 0 10px 30px #00000075;
     }
 
     #canvas {
@@ -22,72 +114,53 @@
       -webkit-transform: scaleX(-1);
     }
 
-    #train-controller {
-      margin-left: 700px;
+    .button {
+      background: #d18c53;
+      border: none;
+      outline: none;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      border-radius: 4px;
+      margin-right: 15px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #00000075;
     }
 
-    .button {
-      display: block;
-      margin: 10px;
+    .file-upload {
+      background: #d18c53;
+      border: none;
+      color: black;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      border-radius: 4px;
+      margin-right: 15px;
+      cursor: pointer;
     }
 
     .container {
-      border-top: 1px solid #555;
-      margin: 15px;
+      color: #d18c53;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin-bottom: 15px;
+      margin-left: 25px;
+    }
+
+    #player {
+      display: none;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .loss {
+      margin-top: 20px;
+      font-weight: 700;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .collected {
+      text-decoration: underline;
     }
   </style>
-  <body>
-    <div class="camera-box">
-      <video autoplay width="640" height="480" id="video"></video>
-      <canvas width="640" height="480" id="canvas"></canvas>
-    </div>
-    <div id="train-controller">
-      <button type="button" id="load-data-set" class="button">Load</button>
-      <input type="file" id="data-set-input">File data set</button>
-      <button type="button" id="save-data-set" class="button">Save</button>
-      <div class="container">
-        <button type="button" id="track-idle" class="button">Track idle</button>
-        Idle:
-        <span id="number-of-collected-idle"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-hand-left-slide" class="button">Track hand left slide</button>
-        Hand left slide:
-        <span id="number-of-collected-hand-left-slide"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-hand-right-slide" class="button">Track hand right slide</button>
-        Hand right slide:
-        <span id="number-of-collected-hand-right-slide"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-hand-top-slide" class="button">Track hand top slide</button>
-        Hand top slide:
-        <span id="number-of-collected-hand-top-slide"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-hand-bottom-slide" class="button">Track hand bottom slide</button>
-        Hand bottom slide:
-        <span id="number-of-collected-hand-bottom-slide"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-rotate-clockwise" class="button">Track rotate clockwise</button>
-        Hand rotate-clockwise:
-        <span id="number-of-collected-rotate-clockwise"></span>
-      </div>
-      <div class="container">
-        <button type="button" id="track-rotate-counter-clockwise" class="button">Track rotate counter clockwise</button>
-        Hand rotate-clockwise:
-        <span id="number-of-collected-rotate-counter-clockwise"></span>
-      </div>
-      <button type="button" id="train-model" class="button">Train model</button>
-      <button type="button" id="predict" class="button">Predict</button>
-    </div>
-    <div class="player">
-      <audio id="audio" controls>
-        <source src="../../assets/jakehill.mp3" type="audio/mp3">
-      </audio>
-    </div>
-  </body>
   <script src="../../dist/demo_2.bundle.js"></script>
 </html>

@@ -9,8 +9,6 @@ export class DetectionRunner {
   }
 
   init() {
-    console.log('DetectionRunner init...');
-
     const runnableCb = () => {
       this.handEstimator.estimate()
         .then((estimation) => {

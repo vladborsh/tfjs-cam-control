@@ -76,10 +76,15 @@ export class UIController {
 
     if (!button) return;
 
+    const onBatchEnd = (logs) => {
+      const lossValue = document.getElementById('loss-value');
+      lossValue.innerText = logs.loss;
+    }
+
     button.addEventListener('click', () => {
       this.modelTrainer.train(
         this.dataAccumulator.datasetMap,
-        (epoch, log) => console.log(epoch, log)
+        (epoch, log) => onBatchEnd(log)
       );
     })
   }
@@ -90,6 +95,12 @@ export class UIController {
     if (!button) return;
 
     button.addEventListener('click', () => {
+      const player = document.querySelector('#player');
+      const trainController = document.querySelector('#train-controller')
+
+      player.style.display = 'block';
+      trainController.style.display = 'none';
+
       this.predictor.initPrediction();
     })
   }

@@ -15,21 +15,19 @@ export class RealModelTrainer {
       layers: [
         // shape.slice(1) потому что первое значение в shape - null
         tf.layers.flatten({ inputShape: this.modelLoader.truncatedModel.outputs[0].shape.slice(1)}),
-        tf.layers.dense({ units: this.numHiddenLayers, kernelInitializer: 'varianceScaling', useBias: true, activation: 'relu'}),
-        tf.layers.dense({ units: this.numClasses, kernelInitializer: 'varianceScaling', useBias: false, activation: 'softmax'})
+        tf.layers.dense({ units: 30, activation: 'relu'}),
+        tf.layers.dense({ units: 3, activation: 'softmax'})
       ]
     });
-    this.model.compile({optimizer: tf.train.adam(this.learningRate), loss: 'categoricalCrossentropy'});
+    this.model.compile({optimizer: tf.train.adam(0.001), loss: 'categoricalCrossentropy'});
   }
 
   train(onBatchEnd) {
-    const batchSize = Math.floor(this.trainingSampleCapturer.savedX.shape[0]);
-
     return this.model.fit(
       this.trainingSampleCapturer.savedX,
       this.trainingSampleCapturer.savedY,
       {
-        batchSize,
+        batchSize: this.batchSize,
         epochs: this.numEpochs,
         callbacks: {
           onBatchEnd: async (batch, logs) => onBatchEnd(logs),

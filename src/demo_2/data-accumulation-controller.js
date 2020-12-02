@@ -22,13 +22,10 @@ export class DataAccumulationController {
     let iteration = 0;
     let landmarksSeries = [];
 
-    console.log(`accumulate [${label}] started...`);
-
     const accumulationCallback = (landmarks) => {
       if (iteration++ < SERIES_LENGTH) {
         landmarksSeries.push(landmarks);
       } else {
-        console.log(`accumulate [${label}] finished`);
         this.dataAccumulator.addData(label, landmarksSeries);
         this.accumulationCallback = null;
         if (onFinishCallback) {

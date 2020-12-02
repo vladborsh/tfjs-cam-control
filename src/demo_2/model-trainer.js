@@ -65,10 +65,7 @@ export class ModelTrainer {
     model.add(tf.layers.dense({units: 100, kernelInitializer: 'varianceScaling', useBias: true, activation: 'relu'}));
     model.add(tf.layers.dense({units: numOfClasses, kernelInitializer: 'varianceScaling', useBias: false, activation: 'softmax'}));
 
-    model.compile({
-      optimizer: tf.train.adam(learningRate),
-      loss: 'categoricalCrossentropy'
-    });
+    model.compile({ optimizer: tf.train.adam(learningRate), loss: 'categoricalCrossentropy' });
 
     const { dataSeries, labelSeries } = this.prepareLabeledData(inputs, outputs, inputLayerShape);
     const batchSize = Math.floor(dataSeries.shape[0]);

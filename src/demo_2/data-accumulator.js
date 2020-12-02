@@ -31,6 +31,9 @@ export class DataAccumulator {
       return false;
     }
 
+    const fileNameEl = document.querySelector('#file-name');
+    fileNameEl.innerHTML = files[0].name;
+
     const fr = new FileReader();
 
     fr.onload = (e) => {
