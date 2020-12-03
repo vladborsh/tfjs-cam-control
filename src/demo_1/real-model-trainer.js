@@ -15,8 +15,8 @@ export class RealModelTrainer {
       layers: [
         // shape.slice(1) потому что первое значение в shape - null
         tf.layers.flatten({ inputShape: this.modelLoader.truncatedModel.outputs[0].shape.slice(1)}),
-        tf.layers.dense({ units: 30, activation: 'relu'}),
-        tf.layers.dense({ units: 3, activation: 'softmax'})
+        tf.layers.dense({ units: this.numHiddenLayers, activation: 'relu'}),
+        tf.layers.dense({ units: this.numClasses, activation: 'softmax'})
       ]
     });
     this.model.compile({optimizer: tf.train.adam(0.001), loss: 'categoricalCrossentropy'});
