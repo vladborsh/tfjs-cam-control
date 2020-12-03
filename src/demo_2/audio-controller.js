@@ -4,6 +4,7 @@ export class AudioController {
   init() {
     console.log('AudioController init...'),
     this.audio = document.getElementById('audio');
+    this.volume = document.getElementById('volume');
 
     document.addEventListener('hand-left-slide', () => {
       console.log('hand-left-slide')
@@ -40,24 +41,26 @@ export class AudioController {
   }
 
   forwardTime() {
-    this.audio.currentTime++;
+    this.audio.currentTime+=3;
   }
 
   backwardTime() {
     if (this.audio.currentTime > 0) {
-      this.audio.currentTime--;
+      this.audio.currentTime-=3;
     }
   }
 
   upVolume() {
     if (this.audio.volume < 1) {
       this.audio.volume += 0.1;
+      this.volume.innerText = this.audio.volume.toFixed(2);
     }
   }
 
   downVolume() {
     if (this.audio.volume > 0) {
       this.audio.volume -= 0.1;
+      this.volume.innerText = this.audio.volume.toFixed(2);
     }
   }
 }

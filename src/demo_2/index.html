@@ -73,10 +73,19 @@
           </div>
         </div>
       </div>
-      <div id="player">
+      <div class="container" id="player">
         <audio id="audio" controls>
           <source src="../../assets/jakehill.mp3" type="audio/mp3">
         </audio>
+        <div class="container m-t">
+          Volume:
+          <span id="volume"></span>
+        </div>
+        <div class="container">
+          Command:
+          <span id="predictor-command"></span>
+        </div>
+        <!-- <button class='play-button'></button> -->
       </div>
     </div>
   </body>
@@ -97,6 +106,7 @@
 
     .camera-box {
       width: 640px;
+      height: 480px;
       position: relative;
     }
 
@@ -160,6 +170,33 @@
 
     .collected {
       text-decoration: underline;
+    }
+
+    .play-button {
+      border: 0;
+      background: transparent;
+      box-sizing: border-box;
+      width: 0;
+      height: 30px;
+      border-color: transparent transparent transparent #d18c53;
+      transition: 100ms all ease;
+      cursor: pointer;
+      border-style: solid;
+      border-width: 15px 0 15px 30px;
+      border-radius: 5px;
+    }
+
+    .play-button.paused {
+      border-style: double;
+      border-width: 0px 0 0px 30px;
+    }
+
+    .play-button:hover {
+      border-color: transparent transparent transparent #404040;
+    }
+
+    .m-t {
+      margin-top: 30px;
     }
   </style>
   <script src="../../dist/demo_2.bundle.js"></script>

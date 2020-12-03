@@ -15,7 +15,7 @@ export class GameController {
       computer: 0,
     }
     this.humanTurnEl = document.querySelector('#human-turn')
-    this.computerTurnEl = document.querySelector('#human-turn')
+    this.computerTurnEl = document.querySelector('#computer-turn')
   }
 
   init() {

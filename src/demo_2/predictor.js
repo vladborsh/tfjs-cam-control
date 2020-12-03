@@ -35,8 +35,9 @@ export class Predictor {
       if (Date.now() - this.lastTimestamp <= this.interval) {
         this.predict(this.latestData)
           .then(dataIndex => {
-            console.log(this.modelTrainer.gestures[dataIndex])
             document.dispatchEvent(new CustomEvent(this.modelTrainer.gestures[dataIndex], {detail: {}}));
+            const log = document.querySelector('#predictor-command');
+            log.innerText = this.modelTrainer.gestures[dataIndex];
           });
       }
     }, this.interval);

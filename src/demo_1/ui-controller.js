@@ -18,7 +18,10 @@ export class UIController {
     ].forEach((label, index) => {
       document.getElementById(label).addEventListener('click', () => {
         new Timer(
-          () => this.trainingSampleCapturer.addExample(index, this.webCam.capture()),
+          (iteration) => {
+            this.trainingSampleCapturer.addExample(index, this.webCam.capture())
+            document.getElementById('log-value').innerText = `${label} ${iteration}`
+          },
           () => {
             document.getElementById('log-value').innerText = `${label} done!`
           },

@@ -6,7 +6,7 @@ export class RealModelTrainer {
     this.trainingSampleCapturer = trainingSampleCapturer;
     this.numHiddenLayers = 30;
     this.numClasses = 3;
-    this.numEpochs = 500;
+    this.numEpochs = 200;
     this.learningRate = 0.001;
   }
 
